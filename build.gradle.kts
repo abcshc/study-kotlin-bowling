@@ -13,8 +13,17 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
+
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "bowling.BowlingGameKt"
+    }
 }
