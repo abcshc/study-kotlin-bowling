@@ -2,6 +2,7 @@
 .idea/
 .idea_modules/
 out/
+*.iml
 
 ### Kotlin ###
 # Compiled class file
