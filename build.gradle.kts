@@ -24,6 +24,6 @@ tasks.withType<KotlinCompile> {
 
 val jar by tasks.getting(Jar::class) {
     manifest {
-        attributes["Main-Class"] = "bowling.BowlingGameKt"
+        attributes["Main-Class"] = "bowling.BowlingClubManagerKt"
     }
 }
