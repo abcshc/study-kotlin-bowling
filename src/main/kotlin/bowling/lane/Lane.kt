@@ -9,7 +9,7 @@ class Lane {
     }
 
     fun getKnockedOverCount(): Int {
-        return pins.filter { true }.size
+        return pins.count { it }
     }
 
     fun initializeBowlingPins() {
