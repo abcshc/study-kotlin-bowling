@@ -28,12 +28,12 @@ class LaneTest {
     }
 
     @Test
-    fun `throw Exception when input invalid pin number`(){
-        assertFailsWith(InvalidPinNumberException::class){
+    fun `throw Exception when input invalid pin number`() {
+        assertFailsWith(InvalidPinNumberException::class) {
             lane.knockedOver(intArrayOf(0))
         }
 
-        assertFailsWith(InvalidPinNumberException::class){
+        assertFailsWith(InvalidPinNumberException::class) {
             lane.knockedOver(intArrayOf(11))
         }
     }
