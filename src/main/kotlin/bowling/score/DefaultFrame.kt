@@ -1,6 +1,7 @@
 package bowling.score
 
 import bowling.score.exception.InvalidRollCountException
+import bowling.score.exception.InvalidRollScoreException
 
 class DefaultFrame : Frame {
     private val rollScoreArray: IntArray = IntArray(2)
@@ -14,13 +15,13 @@ class DefaultFrame : Frame {
     }
 
     override fun setNextRollScore(rollScore: Int) {
-        try {
-            if (rollCount > 1)
-                throw InvalidRollCountException()
-            rollScoreArray[rollCount] = rollScore
+        if (rollCount > 1)
+            throw InvalidRollCountException()
+        if(rollScoreArray[0] + rollScore > 10)
+            throw InvalidRollScoreException()
+        rollScoreArray[rollCount] = rollScore
+        rollCount++
+        if(rollScore == 10 && rollCount == 1)
             rollCount++
-        } catch (exception: InvalidRollCountException) {
-            print("invalid roll count exception")
-        }
     }
 }
