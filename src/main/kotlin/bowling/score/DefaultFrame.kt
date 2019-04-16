@@ -17,11 +17,11 @@ class DefaultFrame : Frame {
     override fun setNextRollScore(rollScore: Int) {
         if (rollCount > 1)
             throw InvalidRollCountException()
-        if(rollScoreArray[0] + rollScore > 10)
+        if (rollScoreArray[0] + rollScore > 10)
             throw InvalidRollScoreException()
         rollScoreArray[rollCount] = rollScore
         rollCount++
-        if(rollScore == 10 && rollCount == 1)
+        if (rollScore == 10 && rollCount == 1)
             rollCount++
     }
 }
