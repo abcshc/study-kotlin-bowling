@@ -39,13 +39,14 @@ class LastFrameTest {
     @Test(expected = InvalidRollCountException::class)
     fun `잘못된 스코어 점수 입력 (10개보다 많은 점수 입력)`() {
         lasttFrame.setNextRollScore(10)
-        assertEquals(10, lasttFrame.getRollScore(0))
-        assertEquals(10, lasttFrame.getFrameScore())
         lasttFrame.setNextRollScore(5)
-        assertEquals(5, lasttFrame.getRollScore(1))
-        assertEquals(15, lasttFrame.getFrameScore())
         lasttFrame.setNextRollScore(6)
-        assertEquals(6, lasttFrame.getRollScore(2))
-        assertEquals(21, lasttFrame.getFrameScore())
+    }
+
+    @Test(expected = InvalidRollCountException::class)
+    fun `클리어 못했는데 3번 롤하는 경우`(){
+        lasttFrame.setNextRollScore(3)
+        lasttFrame.setNextRollScore(4)
+        lasttFrame.setNextRollScore(4)
     }
 }
