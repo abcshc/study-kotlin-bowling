@@ -18,8 +18,9 @@ class LastFrame : Frame {
             throw InvalidRollCountException()
         if (currentScore + rollScore == 10)
             currentScore = 0
+        else
+            currentScore += rollScore
         rollScoreArray[rollCount] = rollScore
-        currentScore += rollScore
         rollCount++
     }
 
