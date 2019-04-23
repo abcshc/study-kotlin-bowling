@@ -8,6 +8,7 @@ class LastFrame : Frame {
     private var rollCount: Int = 0
     private var currentScore: Int = 0
     override fun setNextRollScore(rollScore: Int) {
+        // TODO: 예외상황 구체화 시키기
         if (rollScore > 10)
             throw InvalidRollScoreException()
         if (rollCount > 2)
