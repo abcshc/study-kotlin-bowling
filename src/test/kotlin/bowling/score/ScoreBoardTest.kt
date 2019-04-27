@@ -1,6 +1,6 @@
 package bowling.score
 
-import bowling.score.exception.InvalidRollCountException
+import bowling.score.exception.EndedGameException
 import bowling.score.exception.OverFrameException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -31,7 +31,7 @@ class ScoreBoardTest {
         scoreBoard.roll(3)
         scoreBoard.roll(3)
 
-        assertEquals(2, scoreBoard.getCurrentFrameNumber())
+        assertEquals(2, scoreBoard.currentFrameNumber)
         assertEquals(11, scoreBoard.getTotalScore())
         assertEquals(GameStatus.PLAYING, scoreBoard.getGameStatus())
     }
@@ -42,7 +42,7 @@ class ScoreBoardTest {
         scoreBoard.roll(5)
         scoreBoard.roll(3)
 
-        assertEquals(3, scoreBoard.getCurrentFrameNumber())
+        assertEquals(3, scoreBoard.currentFrameNumber)
         assertEquals(26, scoreBoard.getTotalScore())
         assertEquals(GameStatus.PLAYING, scoreBoard.getGameStatus())
     }
@@ -54,7 +54,7 @@ class ScoreBoardTest {
         scoreBoard.roll(10)
         scoreBoard.roll(10)
 
-        assertEquals(5, scoreBoard.getCurrentFrameNumber())
+        assertEquals(5, scoreBoard.currentFrameNumber)
         assertEquals(90, scoreBoard.getTotalScore())
         assertEquals(GameStatus.PLAYING, scoreBoard.getGameStatus())
     }
@@ -74,7 +74,7 @@ class ScoreBoardTest {
         scoreBoard.roll(10)
         scoreBoard.roll(10)
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(300, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
     }
@@ -86,7 +86,7 @@ class ScoreBoardTest {
         scoreBoard.roll(8)
         scoreBoard.roll(1)
 
-        assertEquals(3, scoreBoard.getCurrentFrameNumber())
+        assertEquals(3, scoreBoard.currentFrameNumber)
         assertEquals(27, scoreBoard.getTotalScore())
         assertEquals(GameStatus.PLAYING, scoreBoard.getGameStatus())
     }
@@ -95,7 +95,7 @@ class ScoreBoardTest {
     fun `정상적인 롤 스코어 입력 프레임 변경 10프레임까지`() {
         scoreBoard.repeatableRoll2TimesWith3Points(10)
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(60, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
     }
@@ -108,12 +108,12 @@ class ScoreBoardTest {
         scoreBoard.roll(5)
 
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(75, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `10점보다 많은 점수입력`() {
         scoreBoard.roll(11)
     }
@@ -122,14 +122,14 @@ class ScoreBoardTest {
     fun `6프레임에서 10점보다 많은 점수입력`() {
         scoreBoard.repeatableRoll2TimesWith3Points(5)
 
-        assertEquals(6, scoreBoard.getCurrentFrameNumber())
+        assertEquals(6, scoreBoard.currentFrameNumber)
         assertEquals(30, scoreBoard.getTotalScore())
-        assertFailsWith(InvalidRollCountException::class) {
+        assertFailsWith(EndedGameException::class) {
             scoreBoard.roll(11)
         }
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `10점보다 많은 점수입력(2번 입력의 합)`() {
         scoreBoard.roll(5)
         scoreBoard.roll(6)
@@ -139,7 +139,7 @@ class ScoreBoardTest {
     fun `마지막 프레임 이후 점수입력`() {
         scoreBoard.repeatableRoll2TimesWith3Points(10)
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(60, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
 
@@ -156,7 +156,7 @@ class ScoreBoardTest {
         scoreBoard.roll(10)
         scoreBoard.roll(10)
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(108, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
 
@@ -173,7 +173,7 @@ class ScoreBoardTest {
         scoreBoard.roll(5)
 
 
-        assertEquals(10, scoreBoard.getCurrentFrameNumber())
+        assertEquals(10, scoreBoard.currentFrameNumber)
         assertEquals(75, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
 

@@ -1,10 +1,8 @@
 package bowling.score
 
-import bowling.score.exception.InvalidRollCountException
+import bowling.score.exception.EndedGameException
 import bowling.score.exception.InvalidRollScoreException
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class DefaultFrameTest {
     lateinit var defaultFrame: Frame
@@ -54,14 +52,53 @@ class DefaultFrameTest {
         assertEquals(10, defaultFrame.getFrameScore())
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test
+    fun `종료되지 않은 프레임 확인 일반 점수 입력`() {
+        defaultFrame.setNextRollScore(5)
+        assertFalse(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료되지 않은 프레임 확인 0점`() {
+        defaultFrame.setNextRollScore(0)
+        assertFalse(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 일반 점수 입력`() {
+        defaultFrame.setNextRollScore(3)
+        defaultFrame.setNextRollScore(5)
+        assertTrue(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스트라이크`() {
+        defaultFrame.setNextRollScore(10)
+        assertTrue(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스페어`() {
+        defaultFrame.setNextRollScore(9)
+        defaultFrame.setNextRollScore(1)
+        assertTrue(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 0졈 입력`() {
+        defaultFrame.setNextRollScore(0)
+        defaultFrame.setNextRollScore(0)
+        assertTrue(defaultFrame.isEndedFrame())
+    }
+
+    @Test(expected = EndedGameException::class)
     fun `3번 입력으로 인한 예외 발생`() {
         defaultFrame.setNextRollScore(1)
         defaultFrame.setNextRollScore(2)
         defaultFrame.setNextRollScore(3)
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `첫 10점 후 입력으로 인한 예외 발생`() {
         defaultFrame.setNextRollScore(10)
         defaultFrame.setNextRollScore(1)

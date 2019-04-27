@@ -1,6 +1,6 @@
 package bowling.score
 
-import bowling.score.exception.InvalidRollCountException
+import bowling.score.exception.EndedGameException
 import bowling.score.exception.InvalidRollScoreException
 
 class DefaultFrame : Frame {
@@ -15,13 +15,19 @@ class DefaultFrame : Frame {
     }
 
     override fun setNextRollScore(rollScore: Int) {
-        if (rollCount > 1)
-            throw InvalidRollCountException()
+        if (isEndedFrame())
+            throw EndedGameException()
         if (rollScoreArray[0] + rollScore > 10)
             throw InvalidRollScoreException()
         rollScoreArray[rollCount] = rollScore
         rollCount++
         if (rollScore == 10 && rollCount == 1)
             rollCount++
+    }
+
+    override fun isEndedFrame(): Boolean {
+        if (rollCount > 1)
+            return true
+        return false
     }
 }

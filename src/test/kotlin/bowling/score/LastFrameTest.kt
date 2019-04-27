@@ -1,11 +1,8 @@
 package bowling.score
 
-import bowling.score.exception.InvalidRollCountException
+import bowling.score.exception.EndedGameException
 import bowling.score.exception.InvalidRollScoreException
-import kotlin.test.assertEquals
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
+import kotlin.test.*
 
 class LastFrameTest {
     private lateinit var lastFrame: Frame
@@ -90,21 +87,93 @@ class LastFrameTest {
         assertEquals(10, lastFrame.getRollScore(2))
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test
+    fun `종료되지 않은 프레임 확인 0점`() {
+        lastFrame.setNextRollScore(0)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 일반 점수 입력`() {
+        lastFrame.setNextRollScore(3)
+        lastFrame.setNextRollScore(5)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료되지 않은 프레임 확인 스트라이크`() {
+        lastFrame.setNextRollScore(10)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료되지 않은 프레임 확인 2번 스트라이크`() {
+        lastFrame.setNextRollScore(10)
+        lastFrame.setNextRollScore(10)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료되지 않은 프레임 확인 스페어`() {
+        lastFrame.setNextRollScore(9)
+        lastFrame.setNextRollScore(1)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 0졈 입력`() {
+        lastFrame.setNextRollScore(0)
+        lastFrame.setNextRollScore(0)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스페어 후 일반 점수 입력`() {
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스페어 후 스트라이크 입력`() {
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(10)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스트라이크 후 일반 점수 입력`() {
+        lastFrame.setNextRollScore(10)
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `종료된 프레임 확인 스트라이크 3번`() {
+        lastFrame.setNextRollScore(10)
+        lastFrame.setNextRollScore(10)
+        lastFrame.setNextRollScore(10)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test(expected = InvalidRollScoreException::class)
     fun `잘못된 스코어 입력 (10개보다 많은 점수 입력)`() {
         lastFrame.setNextRollScore(10)
         lastFrame.setNextRollScore(5)
         lastFrame.setNextRollScore(6)
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `클리어 못했는데 3번 롤하는 경우`() {
         lastFrame.setNextRollScore(3)
         lastFrame.setNextRollScore(4)
         lastFrame.setNextRollScore(4)
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `클리어 못했는데 3번 롤하는 경우 0점`() {
         lastFrame.setNextRollScore(0)
         lastFrame.setNextRollScore(0)
@@ -116,7 +185,7 @@ class LastFrameTest {
         lastFrame.setNextRollScore(15)
     }
 
-    @Test(expected = InvalidRollCountException::class)
+    @Test(expected = EndedGameException::class)
     fun `스코어 4번 입력`() {
         lastFrame.setNextRollScore(10)
         lastFrame.setNextRollScore(10)
@@ -138,7 +207,7 @@ class LastFrameTest {
         assertEquals(10, lastFrame.getRollScore(2))
 
         // 예외 발생
-        assertFailsWith(InvalidRollCountException::class) {
+        assertFailsWith(EndedGameException::class) {
             lastFrame.setNextRollScore(10)
         }
     }
