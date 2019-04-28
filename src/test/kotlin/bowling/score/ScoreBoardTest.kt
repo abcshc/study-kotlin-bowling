@@ -78,6 +78,22 @@ class ScoreBoardTest {
     }
 
     @Test
+    fun `정상적인 롤 스코어 입력 9프레임 퍼펙트 240`() {
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+        scoreBoard.roll(10)
+
+        assertEquals(240, scoreBoard.getTotalScore())
+        assertEquals(GameStatus.PLAYING, scoreBoard.getGameStatus())
+    }
+
+    @Test
     fun `정상적인 롤 스코어 입력 스페어 보너스 점수`() {
         scoreBoard.roll(5)
         scoreBoard.roll(5)
@@ -103,7 +119,7 @@ class ScoreBoardTest {
         scoreBoard.roll(5)
         scoreBoard.roll(5)
 
-        assertEquals(75, scoreBoard.getTotalScore())
+        assertEquals(69, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
     }
 
@@ -163,7 +179,7 @@ class ScoreBoardTest {
         scoreBoard.roll(5)
         scoreBoard.roll(5)
 
-        assertEquals(75, scoreBoard.getTotalScore())
+        assertEquals(69, scoreBoard.getTotalScore())
         assertEquals(GameStatus.COMPLETED, scoreBoard.getGameStatus())
 
         assertFailsWith(EndedGameException::class) {

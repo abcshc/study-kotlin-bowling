@@ -1,6 +1,5 @@
 package bowling.score
 
-import bowling.score.exception.EndedFrameException
 import bowling.score.exception.EndedGameException
 import bowling.score.exception.InvalidRollScoreException
 import kotlin.test.*
