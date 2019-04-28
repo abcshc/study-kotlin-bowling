@@ -35,4 +35,8 @@ class LastFrame : Frame {
             return true
         return false
     }
+
+    override fun isStartedFrame(): Boolean {
+        return rollCount != 0
+    }
 }

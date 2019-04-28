@@ -1,5 +1,6 @@
 package bowling.score
 
+import bowling.score.exception.EndedFrameException
 import bowling.score.exception.EndedGameException
 import bowling.score.exception.InvalidRollScoreException
 import kotlin.test.*
@@ -210,5 +211,51 @@ class LastFrameTest {
         assertFailsWith(EndedGameException::class) {
             lastFrame.setNextRollScore(10)
         }
+    }
+
+    @Test
+    fun `프레임 시작 상태확인 준비`() {
+        assertFalse(lastFrame.isStartedFrame())
+    }
+
+    @Test
+    fun `프레임 시작 상태확인 진행중`() {
+        lastFrame.setNextRollScore(4)
+        assertTrue(lastFrame.isStartedFrame())
+    }
+
+    @Test
+    fun `프레임 시작 상태확인 스페어 이후 진행중`() {
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        assertTrue(lastFrame.isStartedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 진행중`() {
+        lastFrame.setNextRollScore(4)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 스페어 이후 확인`() {
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        assertFalse(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 종료`() {
+        lastFrame.setNextRollScore(4)
+        lastFrame.setNextRollScore(4)
+        assertTrue(lastFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 3번 점수 입력 후 종료`() {
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        lastFrame.setNextRollScore(5)
+        assertTrue(lastFrame.isEndedFrame())
     }
 }

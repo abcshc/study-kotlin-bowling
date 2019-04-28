@@ -1,25 +1,44 @@
 package bowling.score
 
+import bowling.score.exception.EndedGameException
+
 class ScoreBoard {
     private val frames = ArrayList<Frame>()
-    // TODO: roll에 적용될 프레임, 시작은 1, 10프레임 이후에는 증가하지 않음
-    var currentFrameNumber = 1
-        private set
+
+    init {
+        for (i in 0..8)
+            frames.add(DefaultFrame())
+
+        frames.add(LastFrame())
+    }
 
     fun roll(score: Int) {
+        frames[getCurrentFrameNumber()].setNextRollScore(score)
     }
 
 
     fun getGameStatus(): GameStatus {
-        return GameStatus.COMPLETED
+        return if (!frames[0].isStartedFrame())
+            GameStatus.READY
+        else if (frames[9].isEndedFrame())
+            GameStatus.COMPLETED
+        else
+            GameStatus.PLAYING
     }
 
     fun getTotalScore(): Int {
         return 0
     }
 
-    private fun getCurrentFrame(): Frame {
-        return frames[currentFrameNumber - 1]
-    }
+    private fun getCurrentFrameNumber(): Int {
+        for (i in 0 until frames.size) {
+            if (!frames[i].isEndedFrame())
+                return i
+        }
 
+        if (frames[9].isEndedFrame())
+            return 9
+        else
+            throw EndedGameException()
+    }
 }

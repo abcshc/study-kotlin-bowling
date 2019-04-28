@@ -5,4 +5,5 @@ interface Frame {
     fun getFrameScore(): Int
     fun getRollScore(rollNumber: Int): Int
     fun isEndedFrame(): Boolean
+    fun isStartedFrame(): Boolean
 }

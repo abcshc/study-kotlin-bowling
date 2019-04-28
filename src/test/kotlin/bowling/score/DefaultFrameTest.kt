@@ -1,6 +1,6 @@
 package bowling.score
 
-import bowling.score.exception.EndedGameException
+import bowling.score.exception.EndedFrameException
 import bowling.score.exception.InvalidRollScoreException
 import kotlin.test.*
 
@@ -91,14 +91,14 @@ class DefaultFrameTest {
         assertTrue(defaultFrame.isEndedFrame())
     }
 
-    @Test(expected = EndedGameException::class)
+    @Test(expected = EndedFrameException::class)
     fun `3번 입력으로 인한 예외 발생`() {
         defaultFrame.setNextRollScore(1)
         defaultFrame.setNextRollScore(2)
         defaultFrame.setNextRollScore(3)
     }
 
-    @Test(expected = EndedGameException::class)
+    @Test(expected = EndedFrameException::class)
     fun `첫 10점 후 입력으로 인한 예외 발생`() {
         defaultFrame.setNextRollScore(10)
         defaultFrame.setNextRollScore(1)
@@ -113,5 +113,29 @@ class DefaultFrameTest {
     fun `두번째 롤에서 프레임 스코어가 10보다 높은 롤 스코어로 인한 예외 발생`() {
         defaultFrame.setNextRollScore(5)
         defaultFrame.setNextRollScore(6)
+    }
+
+    @Test
+    fun `프레임 시작 상태확인 준비`() {
+        assertFalse(defaultFrame.isStartedFrame())
+    }
+
+    @Test
+    fun `프레임 시작 상태확인 진행중`() {
+        defaultFrame.setNextRollScore(4)
+        assertTrue(defaultFrame.isStartedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 진행중`() {
+        defaultFrame.setNextRollScore(4)
+        assertFalse(defaultFrame.isEndedFrame())
+    }
+
+    @Test
+    fun `프레임 종료 상태확인 종료`() {
+        defaultFrame.setNextRollScore(4)
+        defaultFrame.setNextRollScore(4)
+        assertTrue(defaultFrame.isEndedFrame())
     }
 }
