@@ -7,13 +7,30 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-// TODO: 기능별 테스트 작성
 class ScoreBoardTest {
     private lateinit var scoreBoard: ScoreBoard
 
     @BeforeTest
     fun setup() {
         scoreBoard = ScoreBoard()
+    }
+
+    @Test
+    fun `getTotalScore 기능 테스트1`() {
+        scoreBoard.roll(5)
+        scoreBoard.roll(3)
+        scoreBoard.roll(3)
+
+        assertEquals(11, scoreBoard.getTotalScore())
+    }
+
+    @Test
+    fun `getTotalScore 기능 테스트2`() {
+        scoreBoard.roll(10)
+        scoreBoard.roll(5)
+        scoreBoard.roll(3)
+
+        assertEquals(26, scoreBoard.getTotalScore())
     }
 
     @Test
