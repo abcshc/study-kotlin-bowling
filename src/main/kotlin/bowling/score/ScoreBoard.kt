@@ -31,25 +31,12 @@ class ScoreBoard {
         var totalScore = 0
         var spareCount = 1
         var strikeCount = 1
+        // 상태(가중치)와 점수를 저장해야함
+        // 상태를 프레임이 가져가면 어떨까? -> 상태검사(getBonuseWeight)
         frames.forEachIndexed { index, it ->
-            //마지막 프레임 상황만 먼저 처리
-            if (index == frames.lastIndex) {
-                for (i in 0..2) {
-                    if(i == 2) totalScore += it.getRollScore(i)
-                    else {
-                        if (getBonusWeight(spareCount, strikeCount) > 1) {
-                            totalScore += it.getRollScore(i) * getBonusWeight(spareCount, strikeCount)
-                            if (spareCount > 1) spareCount--
-                            if (strikeCount > 1) strikeCount--
-                        } else {
-                            totalScore += it.getRollScore(i) *
-                                    if (getBonusWeight(spareCount, strikeCount) > 3) 3
-                                    else getBonusWeight(spareCount, strikeCount)
-                        }
-                    }
-                }
-            } else {
-                //이후 일반 프레임들 구현
+            // 일반 프레임 점수 계산
+            if (index != frames.lastIndex) {
+                // 보너스 점수가 있을 경우
                 if (getBonusWeight(spareCount, strikeCount) > 1) {
                     totalScore += it.getRollScore(0) *
                             if (getBonusWeight(spareCount, strikeCount) > 3) 3
@@ -59,6 +46,7 @@ class ScoreBoard {
                     totalScore += it.getRollScore(1) *
                             if (getBonusWeight(spareCount, strikeCount) > 3) 3
                             else getBonusWeight(spareCount, strikeCount)
+                // 보너스 점수가 없을 경우
                 } else {
                     totalScore += it.getFrameScore()
                 }
@@ -70,7 +58,23 @@ class ScoreBoard {
                     strikeCount += 2
                 } else if (it.getFrameScore() == 10)
                     spareCount++
-
+            } else {
+                // 마지막 프레임 점수 계산
+                for (i in 0..2) {
+                    if (getBonusWeight(spareCount, strikeCount) > 1) {
+                        totalScore += it.getRollScore(i) * getBonusWeight(spareCount, strikeCount)
+                        if (spareCount > 1) spareCount--
+                        if (strikeCount > 1) strikeCount--
+                    } else {
+                        totalScore += it.getRollScore(i) *
+                                if (getBonusWeight(spareCount, strikeCount) > 3) 3
+                                else getBonusWeight(spareCount, strikeCount)
+                    }
+                    if (i != 2)
+                    else {
+                        return totalScore + it.getRollScore(i)
+                    }
+                }
             }
         }
         return totalScore
