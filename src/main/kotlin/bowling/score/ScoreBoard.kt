@@ -38,15 +38,11 @@ class ScoreBoard {
             if (index != frames.lastIndex) {
                 // 보너스 점수가 있을 경우
                 if (getBonusWeight(spareCount, strikeCount) > 1) {
-                    totalScore += it.getRollScore(0) *
-                            if (getBonusWeight(spareCount, strikeCount) > 3) 3
-                            else getBonusWeight(spareCount, strikeCount)
+                    totalScore += it.getRollScore(0) * getBonusWeight(spareCount, strikeCount)
                     if (spareCount > 1) spareCount--
                     if (strikeCount > 1) strikeCount--
-                    totalScore += it.getRollScore(1) *
-                            if (getBonusWeight(spareCount, strikeCount) > 3) 3
-                            else getBonusWeight(spareCount, strikeCount)
-                // 보너스 점수가 없을 경우
+                    totalScore += it.getRollScore(1) * getBonusWeight(spareCount, strikeCount)
+                    // 보너스 점수가 없을 경우
                 } else {
                     totalScore += it.getFrameScore()
                 }
@@ -61,19 +57,11 @@ class ScoreBoard {
             } else {
                 // 마지막 프레임 점수 계산
                 for (i in 0..2) {
-                    if (getBonusWeight(spareCount, strikeCount) > 1) {
-                        totalScore += it.getRollScore(i) * getBonusWeight(spareCount, strikeCount)
-                        if (spareCount > 1) spareCount--
-                        if (strikeCount > 1) strikeCount--
-                    } else {
-                        totalScore += it.getRollScore(i) *
-                                if (getBonusWeight(spareCount, strikeCount) > 3) 3
-                                else getBonusWeight(spareCount, strikeCount)
-                    }
-                    if (i != 2)
-                    else {
-                        return totalScore + it.getRollScore(i)
-                    }
+                    if (i == 2)
+                        strikeCount = 1
+                    if (i == 1)
+                        spareCount = 1
+                    totalScore += it.getRollScore(i) * getBonusWeight(spareCount, strikeCount)
                 }
             }
         }
